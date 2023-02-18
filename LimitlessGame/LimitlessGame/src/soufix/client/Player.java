@@ -98,7 +98,7 @@ public int prestige = 0;
   private int sexe;
   private int classe;
   private int color2;
-  private int color1;
+  private int color1; 
   private int color3;
   private int level;
   private int energy;
