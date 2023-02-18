@@ -7498,7 +7498,7 @@ public void setOne_windows(boolean one_windows) {
 		
 	}
 	
-	public  double calculLevel()
+	public  double calculLevel() //Calculateur d'exp pour le le setNewLevel
 	{
 		
 		double xptotal = 0;
