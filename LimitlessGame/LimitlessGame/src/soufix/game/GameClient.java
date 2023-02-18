@@ -132,7 +132,7 @@ public int chek;
   public boolean fille_att;
   // connecte
   public boolean connecte = false;
-  private String ip;
+  private String ip; 
 
   public String getHostAdress() {
 		return ip;
