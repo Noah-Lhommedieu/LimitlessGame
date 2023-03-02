@@ -2279,8 +2279,11 @@ public class CommandAdmin extends AdminUser
         }
         if(perso.getLevel()<count)
         {
-          while(perso.getLevel()<count)
-            perso.levelUp(false,true);
+          
+            double xpd = Main.world.getPersoXpMax(count);
+            perso.setLevel(count);
+            perso.setExp(xpd);
+            
           if(perso.isOnline())
           {
             SocketManager.GAME_SEND_SPELL_LIST(perso);

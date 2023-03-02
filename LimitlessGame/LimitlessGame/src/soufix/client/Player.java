@@ -25,6 +25,7 @@ import soufix.fight.Fighter;
 import soufix.fight.spells.Spell;
 import soufix.fight.spells.SpellEffect;
 import soufix.game.GameClient;
+import soufix.game.GameServer;
 import soufix.game.World;
 import soufix.game.action.ExchangeAction;
 import soufix.game.action.GameAction;
@@ -3443,11 +3444,13 @@ public void setTotal_reculte() {
   {
     if(this.getLevel()==Main.world.getExpLevelSize())
       return false;
-    this.level++; // Modifier ça pour faire de 1 a 1  vers  1 -> lvl attendu
-    _capital+=5;
-    _spellPts++;
-    this.maxPdv+=5;
+    double addLvl = addlvl();
+    this.level+= addLvl; // Modifier ça pour faire de 1 a 1  vers  1 -> lvl attendu
+    _capital+= 5 * addLvl;
+    _spellPts += 1 * addLvl;
+    this.maxPdv+= 5*addLvl;
     this.setPdv(this.getMaxPdv());
+    
     SocketManager.GAME_SEND_STATS_PACKET(this);
     if (this.getLevel() == 500)
     {
@@ -3495,9 +3498,10 @@ public void setTotal_reculte() {
       this.exp=(long) Main.world.getExpLevel(this.getLevel()).perso;
     if(send&&isOnline)
     {
-      SocketManager.GAME_SEND_NEW_LVL_PACKET(account.getGameClient(),this.getLevel());
-      SocketManager.GAME_SEND_STATS_PACKET(this);
-      SocketManager.GAME_SEND_SPELL_LIST(this);
+//      SocketManager.GAME_SEND_NEW_LVL_PACKET(account.getGameClient(),this.getLevel());
+    	SocketManager.PACKET_POPUP_DEPART(this, "Tu passes level " + this.level + "\n Tu obtiens " + 5 * (int)addLvl + " de capital et " + (int)addLvl + " points de sorts");
+//      SocketManager.GAME_SEND_STATS_PACKET(this);
+//      SocketManager.GAME_SEND_SPELL_LIST(this);
     }
     if(Config.singleton.serverId != 6)
     if(this.groupe == null)
@@ -7490,34 +7494,42 @@ public void setOne_windows(boolean one_windows) {
             SocketManager.GAME_SEND_MESSAGE(player, "Tous vos sorts ont été montés au niveau <b>6</b>." , "009900");
     }
     }
-	
+	/*
 	public static void setNewLevel(double newLevel) //faire -> setNewLevel(calculLevel());
 	{
 		//Faire en sorte de trouver a partir de l'exp le niveau y correspondant.
 		
 		
-	}
+	}*/
 	
-	public  double calculLevel() //Calculateur d'exp pour le le setNewLevel
+	private int addlvl() //Calculateur d'exp pour le le setNewLevel
 	{
+		int level = 0;
 		
-		double xptotal = 0;
-		while(this.getExp()>=Main.world.getPersoXpMax(this.getLevel())&&this.getLevel()<Main.world.getExpLevelSize())
+		while(this.getExp()>=Main.world.getPersoXpMax(this.getLevel() + level) && (this.getLevel() + level) < Main.world.getExpLevelSize())
 		{
-			xptotal +=  Main.world.getPersoXpMax(this.getLevel() + 1);  // cette ligne = ->
-	    /*  1   0 +
-			2	65 +
-			3	131 +
-			4	197... = 393...
-		*/
-			if ((xptotal > Main.world.getPersoXpMax(this.getLevel() + 1))) // si le level final en fonction de l'exp est trouver on coupe la boucle
-			{
-				break;
-			}
-			
+			level++;
+
 		}
-		return xptotal; // l'exp renvoyer est l'exp du niveau correspondant
+		return level; // l'exp renvoyer est l'exp du niveau correspondant
 		
+		
+		
+		
+//		xptotal +=  Main.world.getPersoXpMax(this.getLevel() + 1);  // cette ligne = ->
+    /*  1   0 +
+		2	65 +
+		3	131 +
+		4	197... = 393...
+	*/
+		
+		
+		
+		/*if ((xptotal > Main.world.getPersoXpMax(this.getLevel() + 1))) // si le level final en fonction de l'exp est trouver on coupe la boucle
+		{
+			break;
+		}*/
+				
 		
 		
 	}
